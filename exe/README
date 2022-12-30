@@ -1,0 +1,28 @@
+这个目录下是单元测试和联合调试使用的程序，可以在Aladdin设备中直接运行的  
+
+####AladdinUDPServer  
+这是模拟local_log_service的可执行程序，这是测试so功能是否正常
+adb push ./AladdinUDPServer /vendor/bin  
+adb root  
+adb remount  
+adb shell  
+cd /vendor/bin  
+./AladdinUDPServer  
+启动程序后一直监听算法SDK的启动，一旦启动就能接收配置查询和接收日志数据  
+
+####AladdinUDPClient  
+这是模拟算法SDK的可执行程序，这是跟local_log_service联调，需要依赖libAladdinSDKLog.so  
+adb push ./AladdinUDPClient /vendor/bin  
+adb push libAladdinSDKLog.so /vendor/bin  
+adb root
+adb remount
+adb shell
+cd /vendor/bin  
+export LD_LIBRARY_PATH=./  
+./AladdinUDPClient file_name cycle_num  
+启动程序后会发送请求获取配置，如果获取到就会发送日志： 
+file_name 是需要发送的日志文件  
+cycle_num 是循环发送次数，应该设置大于0的整数，如果不设置，默认不停循环发送  
+
+AladdinUDPServer + AladdinUDPClient也可以配对使用  
+
